@@ -16,6 +16,7 @@ from Routes.Inventario import inventario_bp
 from Routes.Partida import partida_bp
 from Routes.Sancion import sancion_bp
 from Routes.Estadisticas import estadistica_bp
+from Routes.Login import auth_routes
 
 
 # Registrar rutas
@@ -26,6 +27,7 @@ app.register_blueprint(inventario_bp, url_prefix="/inventario")
 app.register_blueprint(partida_bp, url_prefix="/partidas")
 app.register_blueprint(sancion_bp, url_prefix="/sanciones")
 app.register_blueprint(estadistica_bp, url_prefix="/estadisticas")
+app.register_blueprint(auth_routes,url_prefix="/Login")
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
