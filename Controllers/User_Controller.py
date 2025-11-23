@@ -7,10 +7,10 @@ class UsuarioController:
 
     @staticmethod
     def crear_usuario():
-        data = request.json
+        data = request.get_json(force=True)
         nuevo = Usuario(data).__dict__
         mongo.db.usuarios.insert_one(nuevo)
-        return jsonify({"msg": "Usuario creado"}), 201
+        return jsonify({"msg": "Usuario creado"}), 200
 
     @staticmethod
     def obtener_usuarios():

@@ -2,6 +2,7 @@ from flask import request, jsonify
 from bson import ObjectId
 from db import mongo
 from Models.Partida import Partida
+from Extensions import mongo
 
 class PartidaController:
 

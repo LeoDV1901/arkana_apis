@@ -2,6 +2,7 @@ from flask import request, jsonify
 from bson import ObjectId
 from db import mongo
 from Models.Estadisticas import Estadistica
+from Extensions import mongo
 
 class EstadisticaController:
 
@@ -20,6 +21,7 @@ class EstadisticaController:
         est["_id"] = str(est["_id"])
         return jsonify(est)
 
+    
     @staticmethod
     def actualizar(id_usuario):
         data = request.json
