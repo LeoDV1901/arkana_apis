@@ -2,6 +2,7 @@ from flask import request, jsonify
 from bson import ObjectId
 from db import mongo
 from Models.Carta import Carta
+from Extensions import mongo
 
 class CartaController:
 
@@ -10,7 +11,7 @@ class CartaController:
         data = request.json
         carta = Carta(data).__dict__
         mongo.db.cartas.insert_one(carta)
-        return jsonify({"msg": "Carta creada"}), 201
+        return jsonify({"msg": "Carta creada"}), 200
 
     @staticmethod
     def obtener_todas():

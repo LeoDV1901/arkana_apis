@@ -29,6 +29,7 @@ from Routes.Partida import partida_bp
 from Routes.Sancion import sancion_bp
 from Routes.Estadisticas import estadistica_bp
 from Routes.Login import auth_routes
+from Routes.SparkStats import spark_bp 
 
 # REGISTRAR BLUEPRINTS
 app.register_blueprint(usuario_bp, url_prefix="/usuarios")
@@ -38,7 +39,8 @@ app.register_blueprint(inventario_bp, url_prefix="/inventario")
 app.register_blueprint(partida_bp, url_prefix="/partidas")
 app.register_blueprint(sancion_bp, url_prefix="/sanciones")
 app.register_blueprint(estadistica_bp, url_prefix="/estadisticas")
-app.register_blueprint(auth_routes, url_prefix="/login")
+app.register_blueprint(auth_routes,url_prefix="/Login")
+app.register_blueprint(spark_bp, url_prefix="/spark")
 
 # INICIO DEL SERVIDOR
 if __name__ == "__main__":

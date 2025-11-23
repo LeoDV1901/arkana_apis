@@ -2,6 +2,7 @@ from flask import request, jsonify
 from bson import ObjectId
 from db import mongo
 from Models.Sancion import Sancion
+from Extensions import mongo
 
 class SancionController:
 
