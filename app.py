@@ -29,7 +29,11 @@ from Routes.Partida import partida_bp
 from Routes.Sancion import sancion_bp
 from Routes.Estadisticas import estadistica_bp
 from Routes.Login import auth_routes
-from Routes.SparkStats import spark_bp 
+
+from Routes.SparkStarts import sparks_bp
+from Routes.Estadisticas_globales import estadisticasG_bp
+from Routes.Regresiones import regresion_bp
+from Routes.RegresionM import regresion_multiple_bp
 
 # REGISTRAR BLUEPRINTS
 app.register_blueprint(usuario_bp, url_prefix="/usuarios")
@@ -40,7 +44,13 @@ app.register_blueprint(partida_bp, url_prefix="/partidas")
 app.register_blueprint(sancion_bp, url_prefix="/sanciones")
 app.register_blueprint(estadistica_bp, url_prefix="/estadisticas")
 app.register_blueprint(auth_routes,url_prefix="/Login")
-app.register_blueprint(spark_bp, url_prefix="/spark")
+
+
+
+app.register_blueprint(sparks_bp, url_prefix="/arrancarSpark")
+app.register_blueprint(estadisticasG_bp, url_prefix="/SparkResultados")
+app.register_blueprint(regresion_bp, url_prefix="/regresion")
+app.register_blueprint(regresion_multiple_bp, url_prefix="/regresionM")
 
 # INICIO DEL SERVIDOR
 if __name__ == "__main__":
