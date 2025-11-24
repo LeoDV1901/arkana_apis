@@ -4,18 +4,19 @@ import certifi
 from flask_cors import CORS
 from flask import send_from_directory
 
-
 app = Flask(__name__)
 
 app.config["MONGO_URI"] = "mongodb+srv://marcosj9807_db_user:GQ3MEg7vIKovKO0z@arkana.ge1yf3l.mongodb.net/arkana?retryWrites=true&w=majority&appName=Spark"
 app.config["MONGO_TLSCAFILE"] = certifi.where()
 mongo.init_app(app)
 
+# 🔥 SOLO UNA CONFIGURACIÓN DE CORS (correcta)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory('static', 'api.ico')
 
-# Ruta principal
 @app.route("/")
 def home():
     return "Hola mundo desde Python API"
@@ -41,15 +42,12 @@ app.register_blueprint(carta_nfc_bp, url_prefix="/cartas_nfc")
 app.register_blueprint(inventario_bp, url_prefix="/inventario")
 app.register_blueprint(partida_bp, url_prefix="/partidas")
 app.register_blueprint(sancion_bp, url_prefix="/sanciones")
-app.register_blueprint(auth_routes,url_prefix="/login")
+app.register_blueprint(auth_routes, url_prefix="/login")
 app.register_blueprint(estadisticas_bp, url_prefix="/estadisticas")
 app.register_blueprint(sparks_bp, url_prefix="/arrancarSpark")
 app.register_blueprint(estadisticasG_bp, url_prefix="/SparkResultados")
 app.register_blueprint(regresion_bp, url_prefix="/regresion")
 app.register_blueprint(regresion_multiple_bp, url_prefix="/regresionM")
-
-CORS(app, supports_credentials=True)
-CORS(app, resources={r"/*": {"origins": "*"}}, methods=["GET","POST","OPTIONS"])
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)

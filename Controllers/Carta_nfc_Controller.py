@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from bson import ObjectId
-from db import mongo
+from Extensions import mongo
 from Models.Carta_nfc import CartaNFC
 
 class CartaNFCController:
@@ -10,16 +10,14 @@ class CartaNFCController:
         data = request.json
 
         # Validar campos obligatorios
-        faltantes = []
-        for campo in ["id_chip", "id_carta", "propietario_actual"]:
-            if campo not in data or data[campo] in [None, ""]:
-                faltantes.append(campo)
+        faltantes = [campo for campo in ["id_chip", "id_carta", "propietario_actual"]
+                     if campo not in data or data[campo] in [None, ""]]
 
         if faltantes:
             return jsonify({"error": f"Faltan campos obligatorios: {', '.join(faltantes)}"}), 400
 
-        # Crear objeto del modelo
-        nfc = CartaNFC(data).__dict__
+        # Crear objeto del modelo y convertir a dict para Mongo
+        nfc = CartaNFC(data).to_dict()
 
         # Guardar en Mongo
         result = mongo.db.cartas_nfc.insert_one(nfc)
@@ -57,10 +55,8 @@ class CartaNFCController:
         data = request.json
 
         # No permitir modificar _id o fecha_creacion
-        if "_id" in data:
-            del data["_id"]
-        if "fecha_creacion" in data:
-            del data["fecha_creacion"]
+        data.pop("_id", None)
+        data.pop("fecha_creacion", None)
 
         mongo.db.cartas_nfc.update_one(
             {"_id": ObjectId(id)},
