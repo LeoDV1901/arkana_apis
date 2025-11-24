@@ -2,13 +2,23 @@ from flask import Flask
 from Extensions import mongo
 import certifi
 from flask_cors import CORS
+from flask import send_from_directory
 
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb+srv://marcosj9807_db_user:GQ3MEg7vIKovKO0z@arkana.ge1yf3l.mongodb.net/arkana?retryWrites=true&w=majority&appName=Spark"
 
+app.config["MONGO_URI"] = "mongodb+srv://marcosj9807_db_user:GQ3MEg7vIKovKO0z@arkana.ge1yf3l.mongodb.net/arkana?retryWrites=true&w=majority&appName=Spark"
 app.config["MONGO_TLSCAFILE"] = certifi.where()
 mongo.init_app(app)
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'api.ico')
+
+# Ruta principal
+@app.route("/")
+def home():
+    return "Hola mundo desde Python API"
 
 # Rutas
 from Routes.User import usuario_bp
@@ -18,6 +28,7 @@ from Routes.Inventario import inventario_bp
 from Routes.Partida import partida_bp
 from Routes.Sancion import sancion_bp
 from Routes.Login import auth_routes
+
 from Routes.SparkStarts import sparks_bp
 from Routes.routes_estadisticas import estadisticas_bp
 from Routes.Estadisticas_globales import estadisticasG_bp
