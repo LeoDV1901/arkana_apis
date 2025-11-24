@@ -1,5 +1,16 @@
-Bienvenidos a Arkana Api
-para correr la api se requiere instalar los paquetes en requirements.txt
+# Arkana API
+
+Bienvenidos a **Arkana API**.
+
+## Requisitos
+
+Antes de ejecutar la API, asegúrate de tener instalado Python y `pip`.
+
+## Instalación
+
+1. Clona el repositorio y posteriormente ejecuta:
+
+```bash
+
 pip install -r requirements.txt
-para correr la api 
 python app.py
