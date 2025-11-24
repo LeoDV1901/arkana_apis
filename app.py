@@ -2,6 +2,7 @@ from flask import Flask
 from Extensions import mongo
 import certifi
 from flask_cors import CORS
+from flask import send_from_directory
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +15,11 @@ app.config["MONGO_URI"] = (
 app.config["MONGO_TLSCAFILE"] = certifi.where()
 
 mongo.init_app(app)
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'api.ico')
 
 # Ruta principal
 @app.route("/")
@@ -39,7 +45,7 @@ app.register_blueprint(inventario_bp, url_prefix="/inventario")
 app.register_blueprint(partida_bp, url_prefix="/partidas")
 app.register_blueprint(sancion_bp, url_prefix="/sanciones")
 app.register_blueprint(estadistica_bp, url_prefix="/estadisticas")
-app.register_blueprint(auth_routes,url_prefix="/Login")
+app.register_blueprint(auth_routes,url_prefix="/login")
 app.register_blueprint(spark_bp, url_prefix="/spark")
 
 # INICIO DEL SERVIDOR
