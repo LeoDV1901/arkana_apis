@@ -7,28 +7,36 @@ from sklearn.linear_model import LinearRegression
 import io
 import base64
 
-regresion_multiple_bp = Blueprint("regresion_multiple_bp", __name__)
+regresion_multiple_bp = Blueprint("regresion_multiple", __name__)
 
-@regresion_multiple_bp.get("")
+@regresion_multiple_bp.route("/", methods=["GET"])
 def grafica_regresion_multiple():
     coleccion = mongo.db.estadisticas
     datos = list(coleccion.find({}, {"_id": 0}))
+
+    if not datos:
+        return jsonify({"error": "No hay datos almacenados en 'estadisticas'"}), 400
+
     df = pd.DataFrame(datos)
 
     # Filtrar columnas numéricas
     df_num = df.select_dtypes(include=["number"])
     if df_num.shape[1] < 3:
-        return jsonify({"error": "Se requieren al menos 3 columnas numéricas para graficar en 3D"}), 400
+        return jsonify({
+            "error": "Se requieren al menos 3 columnas numéricas para graficar en 3D"
+        }), 400
 
-    # X = todas menos la última
+    # X = todas menos la última columna numérica
     X = df_num.iloc[:, :-1]
-    # Y = última
+
+    # Y = última columna numérica
     y = df_num.iloc[:, -1]
 
+    # Ajustar el modelo
     modelo = LinearRegression()
     modelo.fit(X, y)
 
-    # Rango para 3D (solo usamos primeras 2 columnas como ejes)
+    # Tomamos las primeras dos columnas para el plano 3D
     x1 = X.iloc[:, 0]
     x2 = X.iloc[:, 1]
 
@@ -37,7 +45,7 @@ def grafica_regresion_multiple():
 
     X1_grid, X2_grid = np.meshgrid(x1_range, x2_range)
 
-    # Para variables adicionales, se usa su promedio
+    # Promedios para variables extra
     adicionales = []
     if X.shape[1] > 2:
         for i in range(2, X.shape[1]):
@@ -46,7 +54,7 @@ def grafica_regresion_multiple():
     else:
         adicionales = np.zeros((0, X1_grid.size))
 
-    # Crear matriz completa para predicción
+    # Matriz completa para predicción
     X_pred = np.vstack([
         X1_grid.ravel(),
         X2_grid.ravel(),
@@ -55,27 +63,27 @@ def grafica_regresion_multiple():
 
     Z = modelo.predict(X_pred).reshape(X1_grid.shape)
 
-    # ================== Gráfica 3D ==================
+    # ========= Gráfica 3D =========
     fig = go.Figure()
 
-    # Datos reales
+    # Puntos reales
     fig.add_trace(go.Scatter3d(
         x=x1,
         y=x2,
         z=y,
         mode='markers',
-        marker=dict(size=4, color='blue', opacity=0.6),
+        marker=dict(size=4, opacity=0.6),
         name='Datos reales'
     ))
 
-    # Plano de regresión
+    # Plano del modelo
     fig.add_trace(go.Surface(
         x=X1_grid,
         y=X2_grid,
         z=Z,
-        colorscale='Reds',
-        opacity=0.5,
-        name='Plano del modelo'
+        opacity=0.6,
+        colorscale='Viridis',
+        name='Plano de regresión'
     ))
 
     fig.update_layout(
@@ -84,16 +92,16 @@ def grafica_regresion_multiple():
             yaxis_title=X.columns[1],
             zaxis_title=df_num.columns[-1]
         ),
-        title='Regresión Lineal Múltiple (Plano 3D)',
+        title='Regresión Lineal Múltiple (3D)',
         width=900,
         height=700
     )
 
-    # Convertir a imagen PNG
+    # Convertir figura a PNG
     buffer = io.BytesIO()
-    fig.write_image(buffer, format="png")
+    fig.write_image(buffer, format="png")  # Requiere kaleido instalado
     buffer.seek(0)
-    img_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    img_base64 = base64.b64encode(buffer.read()).decode("utf-8")
 
     return jsonify({
         "mime": "image/png",

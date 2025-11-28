@@ -4,10 +4,19 @@ from Controllers.EstadisticasGlobales import (
     obtener_ultima_estadistica_global
 )
 
+# Blueprint que agrupa todas las rutas relacionadas con las
+# estadísticas globales generadas por Spark.
+# Se registrará en app.py con el prefijo /SparkResultados
 estadisticasG_bp = Blueprint("estadisticas_globales", __name__)
 
-# Ruta para obtener TODAS las estadísticas generadas
+# ============================================================
+#   GET /SparkResultados
+#   Obtiene TODOS los documentos de estadísticas globales
+# ============================================================
 estadisticasG_bp.get("")(obtener_estadisticas_globales)
 
-# Ruta para obtener SOLO el último documento
+# ============================================================
+#   GET /SparkResultados/ultimas
+#   Obtiene ÚNICAMENTE el último documento generado por Spark
+# ============================================================
 estadisticasG_bp.get("/ultimas")(obtener_ultima_estadistica_global)

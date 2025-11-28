@@ -1,14 +1,27 @@
-certifi==2025.11.12
-Flask==3.1.2
-flask_cors==6.0.1
-flask_migrate==4.1.0
-flask_pymongo==3.0.1
-flask_sqlalchemy==3.1.1
-matplotlib==3.10.7
-numpy==2.3.5
-pandas==2.3.3
-plotly==6.5.0
-pymongo==4.15.4
-pyspark==4.0.1
-python-dotenv==1.2.1
-scikit_learn==1.7.2
+# Certificados raíz para conexiones TLS (MongoDB Atlas, APIs seguras)
+certifi
+
+# --- Framework web principal ---
+Flask==3.1.2                 # Framework web para la API
+flask_cors==6.0.1            # Permite peticiones CORS
+flask_migrate==4.1.0         # Migraciones de base de datos (SQLAlchemy)
+flask_pymongo==3.0.1         # Conexión directa a MongoDB desde Flask
+flask_sqlalchemy==3.1.1      # ORM de SQL para bases como PostgreSQL o MySQL
+
+# --- Procesamiento y análisis de datos ---
+numpy==2.3.5                 # Cálculo numérico y operaciones vectorizadas
+pandas==2.3.3                # Manipulación de datos estructurados
+matplotlib==3.10.7           # Visualización básica de gráficos
+plotly==6.5.0                # Gráficos interactivos
+
+# --- Conexión y manejo de MongoDB ---
+pymongo==4.15.4              # Cliente oficial para MongoDB
+
+# --- Big Data y procesamiento distribuido ---
+pyspark==3.5.1               # Motor Spark (versión estable)
+
+# --- Variables de entorno ---
+python-dotenv==1.2.1         # Cargar variables del archivo .env
+
+# --- Machine Learning ---
+scikit-learn==1.7.2          # Algoritmos de ML, regresión, clustering, etc.
